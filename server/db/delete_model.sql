@@ -1,1 +1,1 @@
-DELETE FROM models WHERE model_id=$1;
+DELETE FROM users WHERE model_id=$1;

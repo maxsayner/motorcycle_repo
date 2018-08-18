@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const massive = require("massive");
 const passport = require("passport");
 const strategy = require(`${__dirname}/strategy.js`);
+const myGarage = require("./controllers/myGarage");
 
 const brandController = require("./controllers/brand");
 const modelController = require("./controllers/model");
@@ -83,20 +84,20 @@ app.get("/api/brands", brandController.get);
 app.get("/api/models", modelController.get);
 app.get("/api/models/:id", modelController.getModels);
 app.get("/api/specs/:id", modelController.getSpecs);
-// app.get("/api/models/:id", modelController.getSavedBike);
-// app.get("/api/users/:id", usersController.getUsers);
-
 app.get(
   "/api/user",
   (req, res) => console.log(3333, req.session) || res.send(req.session.user)
 );
 
+app.get("/api/get_garage_bikes/:user_id", modelController.getModelsInGarage);
+// app.get("/api/models/:id", modelController.getSavedBike);
+// app.get("/api/users/:id", usersController.getUsers);
+
 app.post("/api/brands", brandController.post);
 app.post("/api/models", modelController.post);
-app.post("/api/post_models", modelController.postModel);
-// app.post("/api/users/:id", myGarage.postSavedBike);
+app.post("/api/post_models", myGarage.postSavedBike);
 
-// app.delete("/api/delete_model/:id", modelController.deleteModel);
+app.delete("/api/delete_model/:id", myGarage.deleteBike);
 
 app.listen(4000, () => {
   console.log("lstening on port 4000");

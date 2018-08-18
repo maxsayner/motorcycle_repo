@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Main from "./Main";
+import Slide from "@material-ui/core/Slide";
+import { URL } from "url";
+import { connect } from "react-redux";
 
 const BASE_URL = "http://localhost:4000";
 
@@ -22,18 +25,19 @@ const GarageNav = styled.div`
   align-items: center;
   justify-content: flex-start;
 `;
-
-const GarageTitle = styled.h1`
-  display: flex;
+const StyledHome = styled.div`
   align-items: center;
-  justify-content: center;
-  color: #176117;
-  font-size: 2.5em;
-  font-family: "Eczar", serif;
+  background-color: transparent;
+  border: none;
 `;
 
-const GarageBody = styled.body`
-  display: flex;
+const GarageTitle = styled.h1`
+  color: #176117;
+  font-size: 2.5em;
+  font-family: serif;
+`;
+
+const GarageBody = styled.div`
   align-items: center;
   margin-bottom: 10px;
 `;
@@ -43,38 +47,46 @@ const NoModel = styled.h1`
   color: red;
 `;
 
-const StyledDelete = styled.button`
-  display: flex;
-  justify-content: center;
+const StyledDelete = styled.div`
   align-items: flex-start;
-  background-color: white;
+  background-color: transparent;
+  border: none;
   margin-right: 100px;
 `;
 
-const StyledHome = styled.button`
+const GarageDiv = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: white;
 `;
 
-export default class MyGarage extends Component {
+const ModelDisplay = styled.div`
+  display: flex;
+  justify-content: flex-wrap;
+  color: green;
+  font-size: 10px;
+`;
+
+const StyledImg = styled.img`
+  width: 10vw;
+`;
+
+class MyGarage extends Component {
   constructor() {
     super();
     this.state = {
-      selectedModel: null,
-      model_id: []
+      selectedModel: [],
+      model_id: [],
+      models: []
     };
   }
 
   componentDidMount = () => {
-    // axios({
-    //     method: "delete",
-    //     //gets brand id and name
-    //     url: BASE_URL + "/api/delete_id"
-    //   }).then(response => {
-    //     this.setState({ model_id: response.data });
-    //   });
+    axios({
+      method: "GET",
+      url: BASE_URL + "/api/get_garage_bikes/" + this.props.userId
+    }).then(response => {
+      this.setState({ models: response.data });
+    });
   };
 
   handleDeleteClick = model_id => {
@@ -82,52 +94,96 @@ export default class MyGarage extends Component {
       method: "DELETE",
       url: BASE_URL + "/api/delete_model/" + model_id
     }).then(response => {
-      this.handleGet();
+      this.state.model_id();
     });
   };
 
   handleHomeClick = () => {
     axios({
-      method: "DELETE",
+      method: "get",
       url: BASE_URL + "/api/Main/"
     }).then(response => {
       this.handleGet();
     });
   };
+  showSavedModel = event => {
+    const index = event.target.value;
+    console.log("index", index);
+
+    this.props.selectedModel(index);
+  };
 
   render() {
-    console.log(!!this.state.selectedModel);
+    console.log(!!this.props.selectedModel);
     return (
       <MainWrapper>
         <GarageNav>
           <StyledDelete>
-            {this.state.selectedModel ? (
+            {/* {this.props.selectedModel ? ( */}
+            <button
+              onClick={() =>
+                this.handleDeleteClick(this.state.selectedModel.model_id)
+              }
+            >
+              Delete Bike
+            </button>
+            {/* ) : null} */}
+            <StyledHome>
               <button
                 onClick={() =>
-                  this.handleDeleteClick(this.state.selectedModel.model_id)
+                  this.handleHomeClick(this.props.history.push("/"))
                 }
               >
-                Delete Bike
+                Home
               </button>
-            ) : null}
+            </StyledHome>
           </StyledDelete>
-          <StyledHome>
-            <button
-              onClick={() => this.handleHomeClick(this.props.history.push("/"))}
+          <GarageDiv>
+            <Slide
+              direction="down"
+              in={true}
+              timeout={1500}
+              mountOnEnter
+              unmountOnExit
             >
-              Home
-            </button>
-          </StyledHome>
-          <GarageTitle> My Garage </GarageTitle>
+              <GarageTitle> My Garage </GarageTitle>
+            </Slide>
+          </GarageDiv>
         </GarageNav>
+
         <GarageBody>
+          {console.log("hello", this.props.selectedModel)}
           <NoModel>
-            {this.state.selectedModel
-              ? this.state.selectedModel.model_name
-              : "no model found"}
+            {this.state.models.length ? (
+              <ModelDisplay>
+                {this.state.models.map(model => (
+                  <div>
+                    <ul>
+                      <li>
+                        <h1>{model ? model.model_name : null}</h1>
+                        {model ? <StyledImg src={model.image_url} /> : null}
+                      </li>
+                    </ul>
+                  </div>
+                ))}
+              </ModelDisplay>
+            ) : (
+              "no models saved!"
+            )}
           </NoModel>
         </GarageBody>
       </MainWrapper>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    userId: state.user.id
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(MyGarage);

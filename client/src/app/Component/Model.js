@@ -5,7 +5,7 @@ import styled from "styled-components";
 export default props => {
   console.log("props in model", props);
   const StyledImg = styled.img`
-    width: 600px;
+    width: 50vw;
   `;
 
   const StyledText = styled.div`

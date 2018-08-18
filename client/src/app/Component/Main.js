@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 import {
   updateBrands,
   updateModels,
-  updateSelectedModel
+  updateSelectedModel,
+  updateUser
 } from "../../ducks/reducer";
 
 import SpecSheet from "./SpecSheet";
@@ -21,23 +22,17 @@ const StyledMain = styled.div`
   background-color: #eae5e5;
   min-height: 100vh;
 `;
-const StyledSelect = styled.div``;
-
-const StyledBrand = styled.select`
-  color: red;
+const StyledSelect = styled.div`
+  display: flex;
 `;
 
-const StyledModel = styled.div`
-  color: red;
-`;
+const StyledBrand = styled.select``;
 
-const StyledImage = styled.div`
-  color: green;
-`;
+const StyledModel = styled.div``;
 
-const Garage = styled.div`
-  background-color: red;
-`;
+const StyledImage = styled.div``;
+
+const Garage = styled.div``;
 
 const BASE_URL = "";
 
@@ -70,7 +65,7 @@ class Main extends Component {
     axios({
       method: "get",
       url: BASE_URL + "/api/user"
-    }).then(response => console.log("this is response", response));
+    }).then(response => this.props.updateUser(response.data));
   }
 
   getModel = event => {
@@ -95,17 +90,20 @@ class Main extends Component {
     const index = event.target.value;
     console.log("index", index);
 
-    this.props.updateSelectedModel;
+    this.props.updateSelectedModel(index);
   };
   // TODO: USE this.props.updateSelectedModel function
 
   onSaveClick = () => {
+    console.log(this.props.selectedModel);
     axios({
       method: "post",
       url: BASE_URL + "/api/post_models",
       data: {
-        model_id: this.props.selectedModel.id
+        model_id: this.props.selectedModel
       }
+    }).catch(err => {
+      console.log("user not signed in");
     });
     //make an axios request to an endpoint on your backend that saves
     //a bike to your garage using this.state.selectedModel
@@ -148,16 +146,21 @@ class Main extends Component {
         <Select />
 
         <div>
-          {this.state.selectedModel ? (
+          {this.props.selectedModel >= 0 ? (
             <div>
-              <h1>{this.state.selectedModel.model_name.image_url}</h1>
-
+              <h1>
+                {
+                  this.props.models[this.props.selectedModel].model_name
+                    .image_url
+                }
+              </h1>
               {/* <Garage>favorited bikes </Garage> */}
+
               <button onClick={this.onSaveClick}>Save Bike</button>
 
               {/* TODO: Use selectedModel from props */}
               <Model
-                selectedModel={this.props.selectedModel}
+                selectedModel={this.props.models[this.props.selectedModel]}
                 key={this.props.selectedModel.model_id}
                 specs={this.state.specs}
               />
@@ -185,5 +188,5 @@ const mapStateToProps = state => {
 // TODO: Link updateSelectedModel fuction
 export default connect(
   mapStateToProps,
-  { updateBrands, updateModels, updateSelectedModel }
+  { updateBrands, updateModels, updateSelectedModel, updateUser }
 )(Main);

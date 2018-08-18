@@ -5,10 +5,24 @@ module.exports = {
     dbInstance.get_models().then(items => res.status(200).send(items));
   },
   postSavedBike: (req, res) => {
-    const dbInstance = req.app.post("db");
-    const { id } = req.session.user.id;
+    const dbInstance = req.app.get("db");
+    if (req.session.user == null) {
+      res.sendStatus(401);
+    }
+
+    const { id } = req.session.user;
+    console.log(req.body);
     const { model_id } = req.body;
 
     console.log(55555, id, 6666, model_id);
+    dbInstance.post_garage([model_id, id]);
+  },
+
+  deleteBike: (req, res) => {
+    const dbInstance = req.app.get("db");
+
+    dbInstance
+      .delete_model([req.app.model_id])
+      .then(items => res.status(200).send("deleted"));
   }
 };

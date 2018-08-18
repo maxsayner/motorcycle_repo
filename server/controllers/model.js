@@ -1,7 +1,7 @@
 module.exports = {
   post: (req, res) => {
     const dbInstance = req.app.get("db");
-    console.log("ZZZZ this is req.body", req.body);
+
     const { model_name, model_id, brand_id, image_url, brand_name } = req.body;
 
     dbInstance
@@ -38,14 +38,9 @@ module.exports = {
 
   postModel: (req, res) => {
     const dbInstance = req.app.get("db");
-    console.log(req.session.user);
 
     const { id } = req.session.user;
     const { model_id } = req.body;
-
-    console.log(55555, id, 6666, model_id);
-
-    dbInstance.post_garage([model_id, id]);
 
     //insert into your garage_bikes database, and pass in the id and the model_id (id goes in user_id)
   },
@@ -59,5 +54,28 @@ module.exports = {
       .update_product([id, name, descr, price, image])
       .then(() => res.status(200))
       .catch(err => console.warn(err));
+  },
+
+  getModelsInGarage: (req, res) => {
+    const dbInstance = req.app.get("db");
+
+    dbInstance.get_items_in_garage([req.params.user_id]).then(garageModels => {
+      const modelsToSend = garageModels.map(item => {
+        return dbInstance.get_model_by_id([item.model_id]).then(model => {
+          return model[0];
+        });
+      });
+
+      const results = Promise.all(modelsToSend);
+      console.log("this is results", results);
+
+      results.then(data => {
+        console.log("this is data", data);
+        res.send(data);
+      });
+
+      // console.log("MODELSTOSEND", modelsToSend);
+      // res.send(modelsToSend);
+    });
   }
 };

@@ -1,19 +1,21 @@
 import React from "react";
 import styled from "styled-components";
+import Slide from "@material-ui/core/Slide";
 
 const StyledTitle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  width: 600px;
-  position: fixed;
+  min-width: 200px;
+  max-width: 400px;
+  position: realitive;
 `;
 
 const Text = styled.h1`
   color: white;
   font-family: "Eczar", serif;
-  font-size: 2em;
+  font-size: 20px;
   margin: 0;
 `;
 
@@ -30,19 +32,31 @@ const Dot = styled.span`
 `;
 
 const Sub = styled.text`
-  color: blue;
+  color:#1308A5
+  font-size: 80%;
 `;
 
 const Title = () => {
   return (
     <StyledTitle>
-      <Text>
-        EN
-        <Mid>CYCLE</Mid>
-        PEDIA
-        <Dot>.</Dot>
-      </Text>
-      <Sub />
+      <Slide
+        direction="down"
+        in={true}
+        timeout={1500}
+        mountOnEnter
+        unmountOnExit
+      >
+        <Text>
+          EN
+          <Mid>CYCLE</Mid>
+          PEDIA
+          <Dot>.</Dot>
+          <br />
+        </Text>
+      </Slide>
+      <Slide direction="up" in={true} timeout={1000} mountOnEnter unmountOnExit>
+        <Sub> A database for all things moto.</Sub>
+      </Slide>
     </StyledTitle>
   );
 };
