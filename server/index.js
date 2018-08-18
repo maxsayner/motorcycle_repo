@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const massive = require("massive");
 const passport = require("passport");
 const strategy = require(`${__dirname}/strategy.js`);
-const myGarage = require("./controllers/myGarage");
+const garageController = require("./controllers/myGarage");
 
 const brandController = require("./controllers/brand");
 const modelController = require("./controllers/model");
@@ -95,9 +95,9 @@ app.get("/api/get_garage_bikes/:user_id", modelController.getModelsInGarage);
 
 app.post("/api/brands", brandController.post);
 app.post("/api/models", modelController.post);
-app.post("/api/post_models", myGarage.postSavedBike);
+app.post("/api/post_models", garageController.postSavedBike);
 
-app.delete("/api/delete_model/:id", myGarage.deleteBike);
+app.delete("/api/delete_models/:model_id", garageController.deleteBike);
 
 app.listen(4000, () => {
   console.log("lstening on port 4000");

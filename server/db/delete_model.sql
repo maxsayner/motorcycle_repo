@@ -1,1 +1,1 @@
-DELETE FROM users WHERE model_id=$1;
+DELETE FROM garage_bikes WHERE model_id=$1;

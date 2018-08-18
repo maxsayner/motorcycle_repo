@@ -38,8 +38,12 @@ const GarageTitle = styled.h1`
 `;
 
 const GarageBody = styled.div`
+  display: flex;
+  justify-content: flex-start;
+
   align-items: center;
-  margin-bottom: 10px;
+  margin-top: 100px;
+  margin-right: 1000px;
 `;
 
 const NoModel = styled.h1`
@@ -61,8 +65,10 @@ const GarageDiv = styled.div`
 
 const ModelDisplay = styled.div`
   display: flex;
-  justify-content: flex-wrap;
-  color: green;
+  flex-direction: column;
+  margin-right: 100px;
+
+  color: black;
   font-size: 10px;
 `;
 
@@ -81,6 +87,10 @@ class MyGarage extends Component {
   }
 
   componentDidMount = () => {
+    this.loadGarageBikes();
+  };
+
+  loadGarageBikes = () => {
     axios({
       method: "GET",
       url: BASE_URL + "/api/get_garage_bikes/" + this.props.userId
@@ -92,9 +102,9 @@ class MyGarage extends Component {
   handleDeleteClick = model_id => {
     axios({
       method: "DELETE",
-      url: BASE_URL + "/api/delete_model/" + model_id
+      url: BASE_URL + "/api/delete_models/" + model_id
     }).then(response => {
-      this.state.model_id();
+      this.loadGarageBikes();
     });
   };
 
@@ -106,12 +116,6 @@ class MyGarage extends Component {
       this.handleGet();
     });
   };
-  showSavedModel = event => {
-    const index = event.target.value;
-    console.log("index", index);
-
-    this.props.selectedModel(index);
-  };
 
   render() {
     console.log(!!this.props.selectedModel);
@@ -120,13 +124,7 @@ class MyGarage extends Component {
         <GarageNav>
           <StyledDelete>
             {/* {this.props.selectedModel ? ( */}
-            <button
-              onClick={() =>
-                this.handleDeleteClick(this.state.selectedModel.model_id)
-              }
-            >
-              Delete Bike
-            </button>
+
             {/* ) : null} */}
             <StyledHome>
               <button
@@ -156,16 +154,19 @@ class MyGarage extends Component {
           <NoModel>
             {this.state.models.length ? (
               <ModelDisplay>
-                {this.state.models.map(model => (
-                  <div>
-                    <ul>
-                      <li>
-                        <h1>{model ? model.model_name : null}</h1>
-                        {model ? <StyledImg src={model.image_url} /> : null}
-                      </li>
-                    </ul>
-                  </div>
-                ))}
+                <ul>
+                  {this.state.models.map(model => (
+                    <li>
+                      <h1>{model ? model.model_name : null}</h1>{" "}
+                      {model ? <StyledImg src={model.image_url} /> : null}
+                      <button
+                        onClick={() => this.handleDeleteClick(model.model_id)}
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </ModelDisplay>
             ) : (
               "no models saved!"

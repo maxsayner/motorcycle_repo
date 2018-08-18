@@ -44,7 +44,8 @@ class Main extends Component {
       models: [],
       brands: [],
       specs: null,
-      user: {}
+      user: {},
+      currentModelId: ""
     };
   }
 
@@ -88,7 +89,8 @@ class Main extends Component {
     console.log("we are here");
     // event.persist();
     const index = event.target.value;
-    console.log("index", index);
+    const model_id = this.props.models[index].model_id;
+    this.setState({ currentModelId: model_id });
 
     this.props.updateSelectedModel(index);
   };
@@ -100,7 +102,7 @@ class Main extends Component {
       method: "post",
       url: BASE_URL + "/api/post_models",
       data: {
-        model_id: this.props.selectedModel
+        model_id: this.state.currentModelId
       }
     }).catch(err => {
       console.log("user not signed in");

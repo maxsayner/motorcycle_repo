@@ -20,9 +20,10 @@ module.exports = {
 
   deleteBike: (req, res) => {
     const dbInstance = req.app.get("db");
+    console.log(76573857392875, req.params.model_id);
 
     dbInstance
-      .delete_model([req.app.model_id])
+      .delete_model([req.params.model_id])
       .then(items => res.status(200).send("deleted"));
   }
 };
