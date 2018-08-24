@@ -6,73 +6,74 @@ import Slide from "@material-ui/core/Slide";
 
 import MyGarage from "./MyGarage";
 
-const StyledNav = styled.nav`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
+const MainWrapper = styled.div`
+  display: grid;
+  grid-column: 1/-1;
+
+  background-color: #989898;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #989898;
-  width: 100%;
-`;
+const ButtonsWrapper = styled.div``;
 
 const MyGarageLink = styled.button`
-  background-color: transparent;
-  border: none;
-  text-decoration: none;
-  font-size: 16px;
-`;
+  grid-column: 1/-1;
 
-const Login = styled.button`
   background-color: transparent;
   border: none;
   text-decoration: none;
   font-size: 12px;
 `;
 
+const Login = styled.button`
+  grid-column: 1/-1;
+  background-color: transparent;
+  border: none;
+  text-decoration: none;
+  font-size: 12px;
+`;
+
+const StyledTitleWrapper = styled.div``;
+
 const Nav = () => {
   return (
-    <Wrapper>
-      <MyGarageLink>
-        <Link to="/MyGarage" className="GarageLink">
-          <Slide
-            direction="right"
-            in={true}
-            timeout={1500}
-            mountOnEnter
-            unmountOnExit
-          >
-            <i className="fas fa-motorcycle fa-3x" />
-          </Slide>
-        </Link>
-        <br />
-        My Garage
-      </MyGarageLink>
-
-      <Login>
-        <a href="http://localhost:4000/login" className="Login">
-          <Slide
-            direction="left"
-            in={true}
-            timeout={1500}
-            mountOnEnter
-            unmountOnExit
-          >
-            <i class="fas fa-sign-in-alt fa-3x" />
-          </Slide>
+    <MainWrapper>
+      <ButtonsWrapper>
+        <MyGarageLink>
+          <Link to="/MyGarage" className="GarageLink">
+            <Slide
+              direction="right"
+              in={true}
+              timeout={1500}
+              mountOnEnter
+              unmountOnExit
+            >
+              <i className="fas fa-motorcycle fa-3x" />
+            </Slide>
+          </Link>
           <br />
-          Log In
-        </a>
-      </Login>
-      <StyledNav>
+          My Garage
+        </MyGarageLink>
+
+        <Login>
+          <a href="http://localhost:4000/login" className="Login">
+            <Slide
+              direction="left"
+              in={true}
+              timeout={1500}
+              mountOnEnter
+              unmountOnExit
+            >
+              <i class="fas fa-sign-in-alt fa-3x" />
+            </Slide>
+            <br />
+            Log In
+          </a>
+        </Login>
+      </ButtonsWrapper>
+      <StyledTitleWrapper>
         <Title />
-      </StyledNav>
-    </Wrapper>
+      </StyledTitleWrapper>
+    </MainWrapper>
   );
 };
 

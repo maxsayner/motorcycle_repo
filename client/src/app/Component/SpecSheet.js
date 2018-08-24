@@ -16,7 +16,7 @@ const Specs = styled.div`
 
 const StyledSpecs = styled.div`
   font-size: 30px;
-  color: red;
+  color: #7c0f06;
   font-style: italic;
 `;
 

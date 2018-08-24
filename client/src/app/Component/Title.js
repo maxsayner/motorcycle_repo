@@ -2,16 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Slide from "@material-ui/core/Slide";
 
-const StyledTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  min-width: 200px;
-  max-width: 400px;
-  position: realitive;
-`;
-
 const Text = styled.h1`
   color: white;
   font-family: "Eczar", serif;
@@ -32,13 +22,13 @@ const Dot = styled.span`
 `;
 
 const Sub = styled.text`
-  color:#1308A5
+  color: #1308a5;
   font-size: 80%;
 `;
 
 const Title = () => {
   return (
-    <StyledTitle>
+    <div>
       <Slide
         direction="down"
         in={true}
@@ -57,7 +47,7 @@ const Title = () => {
       <Slide direction="up" in={true} timeout={1000} mountOnEnter unmountOnExit>
         <Sub> A database for all things moto.</Sub>
       </Slide>
-    </StyledTitle>
+    </div>
   );
 };
 

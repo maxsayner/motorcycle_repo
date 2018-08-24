@@ -5,6 +5,8 @@ import Model from "./Model";
 import styled from "styled-components";
 import Nav from "./Nav";
 import Title from "./Title";
+import Content from "./Content";
+import { withSnackbar } from "material-ui-snackbar-provider";
 import { connect } from "react-redux";
 import {
   updateBrands,
@@ -16,25 +18,50 @@ import {
 import SpecSheet from "./SpecSheet";
 
 const StyledMain = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #eae5e5;
-  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(1, 1fr);
 `;
 const StyledSelect = styled.div`
   display: flex;
+  justify-content: space-between;
+  width: 500px;
+  margin: 20px;
 `;
 
-const StyledBrand = styled.select``;
+const StyledBrand = styled.select`
+  grid-column: 1/-1;
+  color: #1308a5;
+  background-color: #e7731e;
+  height: 40px;
+  width: 200px;
+`;
 
-const StyledModel = styled.div``;
+const StyledModel = styled.select`
+  grid-column: 1/-1;
+  color: #1308a5;
+  background-color: #e7731e;
+
+  justify-content: center;
+
+  height: 40px;
+  width: 200px;
+`;
+
+const StyledSave = styled.button`
+display: flex
+justify-self: center;
+align-items: center;`;
 
 const StyledImage = styled.div``;
 
 const Garage = styled.div``;
 
 const BASE_URL = "";
+
+const SnackbarProvider = styled.div`
+
+`;
 
 class Main extends Component {
   constructor() {
@@ -94,6 +121,14 @@ class Main extends Component {
 
     this.props.updateSelectedModel(index);
   };
+
+  handleToast() {
+    this.props.snackbar.showMessage("Bike added to Garage", "Undo", () =>
+      this.handleUndo()
+    );
+  }
+  handleUndo() {}
+
   // TODO: USE this.props.updateSelectedModel function
 
   onSaveClick = () => {
@@ -113,6 +148,7 @@ class Main extends Component {
 
   render() {
     console.log(this.props);
+
     const Select = () => {
       return (
         <StyledSelect>
@@ -124,8 +160,7 @@ class Main extends Component {
               </option>
             ))}
           </StyledBrand>
-
-          <select onChange={this.showModel}>
+          <StyledModel onChange={this.showModel}>
             <option>-- Select A Model ---</option>
             {this.props.models
               ? this.props.models.map((model, index) => (
@@ -134,10 +169,11 @@ class Main extends Component {
                   </option>
                 ))
               : null}
-          </select>
+          </StyledModel>
         </StyledSelect>
       );
     };
+
     // console.log("this is this.state.brands", this.state.brands);
     return (
       <StyledMain>
@@ -156,10 +192,13 @@ class Main extends Component {
                     .image_url
                 }
               </h1>
+              <SnackbarProvider snackbarProps={{ autoHideDuration: 4000 }}>
+                <StyledSave>
+                  <button onClick={this.onSaveClick}>Save Bike</button>
+                </StyledSave>
+              </SnackbarProvider>
+
               {/* <Garage>favorited bikes </Garage> */}
-
-              <button onClick={this.onSaveClick}>Save Bike</button>
-
               {/* TODO: Use selectedModel from props */}
               <Model
                 selectedModel={this.props.models[this.props.selectedModel]}

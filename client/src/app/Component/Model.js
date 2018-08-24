@@ -10,7 +10,7 @@ export default props => {
 
   const StyledText = styled.div`
     font-size: 30px;
-    color: red;
+    color:#fc5f09
     font-style: italic;
   `;
 

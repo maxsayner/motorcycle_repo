@@ -1,5 +1,5 @@
 const dotenv = require("dotenv");
-dotenv.config();
+dotenv.configs();
 const express = require("express");
 const bodyParser = require("body-parser");
 const massive = require("massive");
@@ -88,6 +88,8 @@ app.get(
   "/api/user",
   (req, res) => console.log(3333, req.session) || res.send(req.session.user)
 );
+app.get("/*", express.static());
+path.join(__dirname, "..", "build");
 
 app.get("/api/get_garage_bikes/:user_id", modelController.getModelsInGarage);
 // app.get("/api/models/:id", modelController.getSavedBike);
