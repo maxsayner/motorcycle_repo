@@ -1,5 +1,6 @@
+const path = require("path");
 const dotenv = require("dotenv");
-dotenv.configs();
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
 const express = require("express");
 const bodyParser = require("body-parser");
 const massive = require("massive");
@@ -88,8 +89,6 @@ app.get(
   "/api/user",
   (req, res) => console.log(3333, req.session) || res.send(req.session.user)
 );
-app.get("/*", express.static());
-path.join(__dirname, "..", "build");
 
 app.get("/api/get_garage_bikes/:user_id", modelController.getModelsInGarage);
 // app.get("/api/models/:id", modelController.getSavedBike);
@@ -100,6 +99,8 @@ app.post("/api/models", modelController.post);
 app.post("/api/post_models", garageController.postSavedBike);
 
 app.delete("/api/delete_models/:model_id", garageController.deleteBike);
+
+app.get("/*", express.static(path.join(__dirname, "..", "build")));
 
 app.listen(4000, () => {
   console.log("lstening on port 4000");

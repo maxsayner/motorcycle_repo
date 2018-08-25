@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Nav from "./Nav";
 import Title from "./Title";
 import Content from "./Content";
-import { withSnackbar } from "material-ui-snackbar-provider";
+
 import { connect } from "react-redux";
 import {
   updateBrands,
@@ -19,9 +19,12 @@ import SpecSheet from "./SpecSheet";
 
 const StyledMain = styled.div`
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: repeat(1, 1fr);
+  grid-column: 1/3;
+  grid-row: 1/3;
+  background-color: #144f4c;
+  height: 100%;
 `;
+
 const StyledSelect = styled.div`
   display: flex;
   justify-content: space-between;
@@ -30,17 +33,15 @@ const StyledSelect = styled.div`
 `;
 
 const StyledBrand = styled.select`
-  grid-column: 1/-1;
-  color: #1308a5;
-  background-color: #e7731e;
+  color: black;
+  background-color: #990000;
   height: 40px;
   width: 200px;
 `;
 
 const StyledModel = styled.select`
-  grid-column: 1/-1;
-  color: #1308a5;
-  background-color: #e7731e;
+  color: black;
+  background-color: #990000;
 
   justify-content: center;
 
@@ -51,17 +52,17 @@ const StyledModel = styled.select`
 const StyledSave = styled.button`
 display: flex
 justify-self: center;
-align-items: center;`;
+align-items: center;
+border: none;
+text-decoration: none;
+
+`;
 
 const StyledImage = styled.div``;
 
 const Garage = styled.div``;
 
 const BASE_URL = "";
-
-const SnackbarProvider = styled.div`
-
-`;
 
 class Main extends Component {
   constructor() {
@@ -122,13 +123,6 @@ class Main extends Component {
     this.props.updateSelectedModel(index);
   };
 
-  handleToast() {
-    this.props.snackbar.showMessage("Bike added to Garage", "Undo", () =>
-      this.handleUndo()
-    );
-  }
-  handleUndo() {}
-
   // TODO: USE this.props.updateSelectedModel function
 
   onSaveClick = () => {
@@ -139,9 +133,15 @@ class Main extends Component {
       data: {
         model_id: this.state.currentModelId
       }
-    }).catch(err => {
-      console.log("user not signed in");
-    });
+    })
+      .then(() => {
+        this.props.snackbar.showMessage("Bike added to Garage", "Undo", () =>
+          this.handleUndo()
+        );
+      })
+      .catch(err => {
+        console.log("user not signed in");
+      });
     //make an axios request to an endpoint on your backend that saves
     //a bike to your garage using this.state.selectedModel
   };
@@ -180,9 +180,7 @@ class Main extends Component {
         <Nav>
           <Title />
         </Nav>
-
         <Select />
-
         <div>
           {this.props.selectedModel >= 0 ? (
             <div>
@@ -192,11 +190,10 @@ class Main extends Component {
                     .image_url
                 }
               </h1>
-              <SnackbarProvider snackbarProps={{ autoHideDuration: 4000 }}>
-                <StyledSave>
-                  <button onClick={this.onSaveClick}>Save Bike</button>
-                </StyledSave>
-              </SnackbarProvider>
+
+              <StyledSave>
+                <button onClick={this.onSaveClick}>Save Bike</button>
+              </StyledSave>
 
               {/* <Garage>favorited bikes </Garage> */}
               {/* TODO: Use selectedModel from props */}
@@ -208,7 +205,6 @@ class Main extends Component {
             </div>
           ) : null}
         </div>
-
         <div />
         <div />
       </StyledMain>

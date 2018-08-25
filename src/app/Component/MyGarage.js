@@ -9,12 +9,11 @@ import { connect } from "react-redux";
 const BASE_URL = "http://localhost:4000";
 
 const MainWrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #eae5e5;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  display: grid;
+  grid-column: 1/3;
+  grid-row: 1/3;
+  background-color: #144f4c;
+  height: 100%;
 `;
 
 const GarageNav = styled.div`
@@ -27,11 +26,14 @@ const GarageNav = styled.div`
 `;
 const StyledHome = styled.div`
   align-items: center;
-  background-color: transparent;
+
   border: none;
 `;
 
 const GarageTitle = styled.h1`
+display: flex
+justify-content: center;
+align-items: center;
   color: #176117;
   font-size: 2.5em;
   font-family: serif;
