@@ -3,27 +3,23 @@ import styled from "styled-components";
 import Slide from "@material-ui/core/Slide";
 
 const Text = styled.h1`
-  color: white;
+  padding: none;
+  color: black;
   font-family: "Eczar", serif;
-  font-size: 20px;
-  margin: 0;
+  font-size: 30px;
 `;
 
 const Mid = styled.span`
   color: #176117;
   font-size: 1.5em;
-  font-family: "Pacifico", cursive;
+
   font-family: "Permanent Marker", cursive;
 `;
 
-const Dot = styled.span`
-  color: #176117;
-  font-size: 1.5em;
-`;
-
 const Sub = styled.text`
-  color: #1308a5;
-  font-size: 80%;
+  color: #176117;
+  font-size: 18px;
+  font-family: "Permanent Marker", cursive;
 `;
 
 const Title = () => {
@@ -40,13 +36,14 @@ const Title = () => {
           EN
           <Mid>CYCLE</Mid>
           PEDIA
-          <Dot>.</Dot>
           <br />
         </Text>
       </Slide>
-      <Slide direction="up" in={true} timeout={1000} mountOnEnter unmountOnExit>
-        <Sub> A database for all things moto.</Sub>
-      </Slide>
+
+      <Sub>
+        {" "}
+        <b> A DATABASE FOR ALL THINGS MOTO </b>
+      </Sub>
     </div>
   );
 };

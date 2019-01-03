@@ -14,6 +14,8 @@ const cors = require("cors");
 const session = require("express-session");
 
 const app = express();
+// app.use(express.static(`${__dirname}/../build`));
+
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -34,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(strategy);
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   // console.log(user);
 
   done(null, {
@@ -45,7 +47,7 @@ passport.serializeUser(function(user, done) {
   });
 });
 
-passport.deserializeUser(function(obj, done) {
+passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
 
@@ -73,7 +75,8 @@ app.get("/me", (req, res, next) => {
     });
 
     //change this url when hosted
-    res.redirect("http://localhost:3000/");
+    // https://newencyclepedia.now.sh
+    res.redirect("https://encyclepedia-ojbcazgqli.now.sh");
     // req.user === req.session.passport.user
     // console.log( req.user )
     // console.log( req.session.passport.user );
@@ -102,6 +105,6 @@ app.delete("/api/delete_models/:model_id", garageController.deleteBike);
 
 app.get("/*", express.static(path.join(__dirname, "..", "build")));
 
-app.listen(4000, () => {
-  console.log("lstening on port 4000");
-});
+const PORT = 4000
+app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+

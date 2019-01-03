@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Model from "./Model";
 import styled from "styled-components";
 import Nav from "./Nav";
 import Title from "./Title";
-import Content from "./Content";
+import { Button } from "react-bootstrap"
+
 
 import { connect } from "react-redux";
 import {
@@ -15,20 +16,27 @@ import {
   updateUser
 } from "../../ducks/reducer";
 
-import SpecSheet from "./SpecSheet";
+
+
+const styles = {
+  brandSelect: {
+    color: "black",
+    backgroundColor: "#990000",
+    height: 40,
+    width: 200
+  }
+};
 
 const StyledMain = styled.div`
-  display: grid;
-  grid-column: 1/3;
-  grid-row: 1/3;
+  display: flex;
+  flex-direction: column;
   background-color: #144f4c;
-  height: 100%;
+  height: 100em;
 `;
 
 const StyledSelect = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 500px;
+  justify-content: space-evenly;
   margin: 20px;
 `;
 
@@ -40,27 +48,20 @@ const StyledBrand = styled.select`
 `;
 
 const StyledModel = styled.select`
+  display: flex;
+  justify-content: center;
   color: black;
   background-color: #990000;
-
-  justify-content: center;
-
   height: 40px;
   width: 200px;
 `;
 
-const StyledSave = styled.button`
-display: flex
-justify-self: center;
-align-items: center;
-border: none;
-text-decoration: none;
+const StyledSave = styled.div`
+
 
 `;
 
-const StyledImage = styled.div``;
 
-const Garage = styled.div``;
 
 const BASE_URL = "";
 
@@ -84,11 +85,10 @@ class Main extends Component {
 
       url: BASE_URL + "/api/brands"
     }).then(response => {
-      console.log("brands", response.data);
 
-      {
-        this.props.updateBrands(response.data);
-      }
+
+      this.props.updateBrands(response.data);
+
     });
 
     axios({
@@ -98,7 +98,7 @@ class Main extends Component {
   }
 
   getModel = event => {
-    console.log("This is value in getModel", event.target.value);
+
     axios({
       //gets ModelID, model image and model name
       method: "get",
@@ -108,13 +108,13 @@ class Main extends Component {
       // e.target.value +
       // "/models"
     }).then(response => {
-      console.log("this is response", response);
+
       this.props.updateModels(response.data);
     });
   };
 
   showModel = event => {
-    console.log("we are here");
+
     // event.persist();
     const index = event.target.value;
     const model_id = this.props.models[index].model_id;
@@ -126,7 +126,7 @@ class Main extends Component {
   // TODO: USE this.props.updateSelectedModel function
 
   onSaveClick = () => {
-    console.log(this.props.selectedModel);
+
     axios({
       method: "post",
       url: BASE_URL + "/api/post_models",
@@ -140,19 +140,19 @@ class Main extends Component {
         );
       })
       .catch(err => {
-        console.log("user not signed in");
+
       });
     //make an axios request to an endpoint on your backend that saves
     //a bike to your garage using this.state.selectedModel
   };
 
   render() {
-    console.log(this.props);
+
 
     const Select = () => {
       return (
         <StyledSelect>
-          <StyledBrand onChange={this.getModel}>
+          <StyledBrand style={styles.brandSelect} onChange={this.getModel}>
             <option>-- Select A Brand --</option>
             {this.props.brands.map(motorcycle => (
               <option key={motorcycle.brand_id} value={motorcycle.id}>
@@ -164,17 +164,17 @@ class Main extends Component {
             <option>-- Select A Model ---</option>
             {this.props.models
               ? this.props.models.map((model, index) => (
-                  <option key={model.model_id} value={index}>
-                    {model.model_name}
-                  </option>
-                ))
+                <option key={model.model_id} value={index}>
+                  {model.model_name}
+                </option>
+              ))
               : null}
           </StyledModel>
         </StyledSelect>
       );
     };
 
-    // console.log("this is this.state.brands", this.state.brands);
+
     return (
       <StyledMain>
         <Nav>
@@ -186,15 +186,15 @@ class Main extends Component {
             <div>
               <h1>
                 {
-                  this.props.models[this.props.selectedModel].model_name
-                    .image_url
+                  this.props.models[this.props.selectedModel].model_name.image_url
                 }
               </h1>
 
               <StyledSave>
-                <button onClick={this.onSaveClick}>Save Bike</button>
+                <Button bsSize="large" onClick={this.onSaveClick}>Save Bike</Button>
               </StyledSave>
-
+              <br />
+              <br />
               {/* <Garage>favorited bikes </Garage> */}
               {/* TODO: Use selectedModel from props */}
               <Model
@@ -214,7 +214,7 @@ class Main extends Component {
 
 // TODO: Use selectModel state
 const mapStateToProps = state => {
-  console.log(state);
+
   return {
     brands: state.brands,
     models: state.modelType,

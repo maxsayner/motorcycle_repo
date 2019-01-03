@@ -1,48 +1,41 @@
 import React, { Component } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import Main from "./Main";
 import Slide from "@material-ui/core/Slide";
-import { URL } from "url";
 import { connect } from "react-redux";
 
 const BASE_URL = "http://localhost:4000";
 
 const MainWrapper = styled.div`
-  display: grid;
-  grid-column: 1/3;
-  grid-row: 1/3;
-  background-color: #144f4c;
-  height: 100%;
+  background-color: #808080;
+  height: 2000px;
 `;
 
 const GarageNav = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100px;
-  background-color: #989898;
-  align-items: center;
-  justify-content: flex-start;
+  background-color:#193086;
+  height: 200px;
 `;
-const StyledHome = styled.div`
-  align-items: center;
 
-  border: none;
+const StyledHome = styled.div`
+display: flex
+justify-content: flex-start;
+  font-size: 20px;
+  padding-left: 80px;
+  padding-top: 60px;
+
 `;
 
 const GarageTitle = styled.h1`
-display: flex
-justify-content: center;
-align-items: center;
-  color: #176117;
-  font-size: 2.5em;
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-size: 60px;
   font-family: serif;
 `;
 
 const GarageBody = styled.div`
   display: flex;
   justify-content: flex-start;
-
   align-items: center;
   margin-top: 100px;
   margin-right: 1000px;
@@ -50,14 +43,7 @@ const GarageBody = styled.div`
 
 const NoModel = styled.h1`
   font-style: italic;
-  color: red;
-`;
-
-const StyledDelete = styled.div`
-  align-items: flex-start;
-  background-color: transparent;
-  border: none;
-  margin-right: 100px;
+  color: black;
 `;
 
 const GarageDiv = styled.div`
@@ -70,12 +56,20 @@ const ModelDisplay = styled.div`
   flex-direction: column;
   margin-right: 100px;
 
-  color: black;
-  font-size: 10px;
+  color: #fc5f09
+  font-size: 20px;
 `;
 
 const StyledImg = styled.img`
   width: 10vw;
+`;
+
+const DeleteButton = styled.div`
+ 
+  font-size: 20px;
+
+  width: 70px;
+  height: 30px;
 `;
 
 class MyGarage extends Component {
@@ -110,34 +104,27 @@ class MyGarage extends Component {
     });
   };
 
+  //main doesnt exist
   handleHomeClick = () => {
     axios({
       method: "get",
-      url: BASE_URL + "/api/Main/"
+      url: BASE_URL + "/api//"
     }).then(response => {
       this.handleGet();
     });
   };
 
   render() {
-    console.log(!!this.props.selectedModel);
     return (
       <MainWrapper>
         <GarageNav>
-          <StyledDelete>
-            {/* {this.props.selectedModel ? ( */}
-
-            {/* ) : null} */}
-            <StyledHome>
-              <button
-                onClick={() =>
-                  this.handleHomeClick(this.props.history.push("/"))
-                }
-              >
-                Home
-              </button>
-            </StyledHome>
-          </StyledDelete>
+          <StyledHome>
+            <button
+              onClick={() => this.handleHomeClick(this.props.history.push("/"))}
+            >
+              Home
+            </button>
+          </StyledHome>
           <GarageDiv>
             <Slide
               direction="down"
@@ -152,7 +139,6 @@ class MyGarage extends Component {
         </GarageNav>
 
         <GarageBody>
-          {console.log("hello", this.props.selectedModel)}
           <NoModel>
             {this.state.models.length ? (
               <ModelDisplay>
@@ -161,18 +147,20 @@ class MyGarage extends Component {
                     <li>
                       <h1>{model ? model.model_name : null}</h1>{" "}
                       {model ? <StyledImg src={model.image_url} /> : null}
-                      <button
-                        onClick={() => this.handleDeleteClick(model.model_id)}
-                      >
-                        Delete
-                      </button>
+                      <DeleteButton>
+                        <button
+                          onClick={() => this.handleDeleteClick(model.model_id)}
+                        >
+                          Delete
+                        </button>
+                      </DeleteButton>
                     </li>
                   ))}
                 </ul>
               </ModelDisplay>
             ) : (
-              "no models saved!"
-            )}
+                "no models saved!"
+              )}
           </NoModel>
         </GarageBody>
       </MainWrapper>

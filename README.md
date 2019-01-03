@@ -1,3 +1,19 @@
+## Things to look at
+- mygarage makes api call to endpoint main that doesnt exist
+- not sure where text element is 
+- garage is not pulling up saved bikes consistantly 
+- specsheet component calls api/spec need to catch error on null
+- main.js line 190 throws err randomly as this.props.selected model is undefined
+-loggin in with github breaks garage
+- before deploying go to server index.js login endpoint and change redirect
+
+
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

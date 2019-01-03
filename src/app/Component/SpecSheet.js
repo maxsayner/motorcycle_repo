@@ -9,14 +9,14 @@ const Specs = styled.div`
   justify-content: center;
   border: 2px solid black;
   height: 350px;
-  width: 400px;
+
   color: black;
   font-size: 20px;
 `;
 
 const StyledSpecs = styled.div`
   font-size: 30px;
-  color: #7c0f06;
+  color: white;
   font-style: italic;
 `;
 
@@ -40,10 +40,8 @@ class SpecSheet extends Component {
       url: "/api/specs/" + this.props.spec_id
     })
       .then(response => {
-        console.log("XXXXXX RESPONSE XXX", response);
         this.setState({ specs: response.data[0] });
       })
-      .catch(err => console.log("XXX ERROR", err));
   };
   render() {
     if (!this.state.specs) return <StyledSpecs>no specs available</StyledSpecs>;
