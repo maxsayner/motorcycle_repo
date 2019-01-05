@@ -11,14 +11,14 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
-    "dotenv": "^6.0.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "massive": "^5.0.0",
     "material-ui": "^0.20.2",
     "material-ui-snackbar-provider": "^0.1.3",
     "passport": "^0.4.0",
-    "passport-auth0": "^1.0.0",
+    "passport-auth0": "^1.1.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.4.1",
@@ -30,11 +30,15 @@
     "styled-components": "^3.4.1"
   },
   "scripts": {
+    "now-start": "node server/index.js",
     "start": "node server/index.js",
     "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "now --public --dotenv=.env"
+    "deploy": "now --public --dotenv=.env.prod -d"
+  },
+  "now": {
+    "alias": "encyclepedia"
   }
 }

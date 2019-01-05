@@ -80,7 +80,7 @@ const Nav = () => {
         </MyGarageLink>
 
         <Login>
-          <a href="https://encyclepedia-fylumvnhhv.now.sh/" className="Login">
+          <a href="https://encyclepedia.now.sh/login" className="Login">
             <Slide
               direction="left"
               in={true}

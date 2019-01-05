@@ -1,11 +1,13 @@
 const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
+// require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const massive = require("massive");
 const passport = require("passport");
-const strategy = require(`${__dirname}/strategy.js`);
+// const Strategy = require(`${__dirname}/strategy.js`);
+const Auth0Strategy = require('passport-auth0');
 const garageController = require("./controllers/myGarage");
 
 const brandController = require("./controllers/brand");
@@ -14,27 +16,37 @@ const cors = require("cors");
 const session = require("express-session");
 
 const app = express();
-// app.use(express.static(`${__dirname}/../build`));
+app.use(express.static(`${__dirname}/../build`));
 
 app.use(bodyParser.json());
-app.use(cors());
+
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true
+}))
+// app.use(cors());
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 massive(process.env.CONNECTION_STRING)
   .then(dbInstance => {
     app.set("db", dbInstance);
   })
-  .catch(err => console.log(err));
+  .catch(err => console.log('Error of db:: ', err));
+passport.use(new Auth0Strategy({
+  domain: process.env.AUTH_DOMAIN,
+  clientID: process.env.AUTH_CLIENT_ID,
+  clientSecret: process.env.AUTH_CLIENT_SECRET,
+  callbackURL: process.env.CALLBACK_URL
+}, function (accessToken, refreshToken, extraParams, profile, done) {
 
-app.use(
-  session({
-    secret: "sup dude",
-    resave: false,
-    saveUninitialized: true
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(strategy);
+  done(null, profile);
+}));
+
 
 passport.serializeUser(function (user, done) {
   // console.log(user);
@@ -54,7 +66,8 @@ passport.deserializeUser(function (obj, done) {
 app.get(
   "/login",
   passport.authenticate("auth0", {
-    successRedirect: "/me",
+    // successRedirect: "/me",
+    successRedirect: "https://encyclepedia.now.sh/",
     failureRedirect: "/login",
     failureFlash: true
   })
@@ -64,7 +77,8 @@ app.get("/me", (req, res, next) => {
   console.log(4444, req.user);
   req.session.user = req.user;
   if (!req.user) {
-    res.redirect("/login");
+    // res.redirect("/login");
+    return res.status(200).send(false)
   } else {
     const dbInstance = req.app.get("db");
 
@@ -76,13 +90,36 @@ app.get("/me", (req, res, next) => {
 
     //change this url when hosted
     // https://newencyclepedia.now.sh
-    res.redirect("https://encyclepedia-ojbcazgqli.now.sh");
+    // res.redirect("https://encyclepedia.now.sh/");
     // req.user === req.session.passport.user
     // console.log( req.user )
     // console.log( req.session.passport.user );
+
+    res.status(200).send(true);
   }
 });
 
+/*
+Mikels server help
+app.get('/auth', passport.authenticate('auth0'));
+
+app.get('/auth/callback', passport.authenticate('auth0', {
+  successRedirect: process.env.SUCCESS_REDIRECT, => https://encyclepedia.now.sh/
+  failureRedirect: '/auth'
+}));
+app.get('/auth/me', (req, res) => {
+  if (!req.user) {
+    return res.status(200).send(false)
+  }
+  return res.status(200).send(true);
+})
+
+
+app.get('/auth/logout', (req, res) => {
+  req.logOut();
+  res.redirect(302, process.env.REDIRECT)
+})
+*/
 //routes
 app.get("/api/brands", brandController.get);
 app.get("/api/models", modelController.get);
@@ -103,8 +140,11 @@ app.post("/api/post_models", garageController.postSavedBike);
 
 app.delete("/api/delete_models/:model_id", garageController.deleteBike);
 
-app.get("/*", express.static(path.join(__dirname, "..", "build")));
-
+// app.get("/*", express.static(path.join(__dirname, "..", "build")));
+// const path = require('path')
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+})
 const PORT = 4000
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
 
