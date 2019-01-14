@@ -36,7 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "now --public --dotenv=.env.prod -d"
+    "deploy": "now --public --dotenv=.env.prod -d",
+    "proxy": "http://localhost:3000"
   },
   "now": {
     "alias": "encyclepedia"

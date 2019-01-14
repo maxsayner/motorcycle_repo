@@ -8,7 +8,7 @@ import MyGarage from "./app/Component/MyGarage";
 export default (
   <Switch>
     <Route exact path="/" component={Main} />
-    {/* <Route path="/login" component={Login} /> */}
+    <Route path="/login" component={Main} />
     <Route path="/MyGarage" component={MyGarage} />
   </Switch>
 );

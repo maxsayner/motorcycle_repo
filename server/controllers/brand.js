@@ -11,7 +11,12 @@ module.exports = {
 
     dbInstance
       .post_motorcycle([req.body.BrandId, req.body.BrandName])
-      .then(response => res.send(response))
+      // .then(response => res.send(response))
+      .then(response => console.log("RESPONSE !!!!!", res))
+
       .catch(err => console.log("XX ERROR", err));
+
   }
 };
+
+
