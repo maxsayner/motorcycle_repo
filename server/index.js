@@ -39,13 +39,13 @@ passport.use(new Auth0Strategy({
 }, function (accessToken, refreshToken, extraParams, profile, done) {
   const db = app.get('db')
   console.log(profile)
-  // db.find_user([profile.identities[0].user_id]).then(user => {
+  // db.get_user([profile.identities[0].user_id]).then(user => {
   //   if (user[0]) {
   //     return done(null, user[0].id)
   //   }
   //   else {
   //     const user = profile._json
-  //     db.create_user([user.name, user.email, user.picture, user.identities[0].user_id])
+  //     db.post_user([user.identities[0].user_id, user.name, user.identities[0].user_id])
   //       .then(user => {
   //         return done(null, user[0].id)
   //       })
@@ -65,6 +65,15 @@ app.get('/auth/me', (req, res) => {
   if (!req.user) {
     return res.status(404).send('User not found')
   }
+  console.log('user', req.user)
+  req.session.user = req.user;
+  const dbInstance = req.app.get("db");
+
+  dbInstance.get_user([req.user.id]).then(user => {
+    if (!user[0].id) {
+      dbInstance.post_user([req.user.nickname, req.user.id]);
+    }
+  });
   return res.status(200).send(req.user);
 })
 
@@ -82,7 +91,7 @@ app.get("/api/specs/:id", modelController.getSpecs);
 
 app.get("/api/get_garage_bikes/:user_id", modelController.getModelsInGarage);
 app.get("/api/models/:id", garageController.getSavedBike);
-app.get("/api/users/:id", usersController.getUsers);
+app.get("/api/user/:id", usersController.getUsers);
 
 app.post("/api/brands", brandController.post);
 app.post("/api/models", modelController.post);
@@ -91,7 +100,7 @@ app.post("/api/post_models", garageController.postSavedBike);
 app.delete("/api/delete_models/:model_id", garageController.deleteBike);
 
 passport.serializeUser(function (user, done) {
-  console.log(user)
+  // console.log(user)
   done(null, {
     id: user.id,
     display: user.displayName,
