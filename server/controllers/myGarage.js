@@ -9,7 +9,7 @@ module.exports = {
     if (req.session.user == null) {
       res.sendStatus(401);
     }
-
+    console.log(req.session)
     const { id } = req.session.user;
     console.log(req.body);
     const { model_id } = req.body;

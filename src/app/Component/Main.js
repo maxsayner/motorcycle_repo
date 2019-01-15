@@ -93,7 +93,7 @@ class Main extends Component {
 
     axios({
       method: "get",
-      url: BASE_URL + "/api/user"
+      url: BASE_URL + "/api/user?1"
     }).then(response => this.props.updateUser(response.data));
   }
 
