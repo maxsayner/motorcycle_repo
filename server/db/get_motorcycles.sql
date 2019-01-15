@@ -1,1 +1,1 @@
-select * from motorcycles
+select * from motorcycles RETURNING *;

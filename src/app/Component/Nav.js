@@ -8,7 +8,7 @@ import Slide from "@material-ui/core/Slide";
 
 const MainWrapper = styled.div`
   background-color: #989898;
- 
+
 `;
 
 const ButtonsWrapper = styled.div`
@@ -80,7 +80,8 @@ const Nav = () => {
         </MyGarageLink>
 
         <Login>
-          <a href="https://encyclepedia.now.sh/login" className="Login">
+          {/* <a href={process.env.REACT_APP_LOGIN} className="Login"> */}
+          <a href="http://localhost:4000/auth" className="Login">
             <Slide
               direction="left"
               in={true}

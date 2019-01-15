@@ -1,7 +1,7 @@
 module.exports = {
   get: (req, res) => {
     const dbInstance = req.app.get("db");
-
+    // console.log('in brand.js', dbInstance)
     dbInstance.get_motorcycles().then(items => res.status(200).send(items));
   },
 
